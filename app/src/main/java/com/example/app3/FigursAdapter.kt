@@ -17,7 +17,7 @@ class FigursAdapter : RecyclerView.Adapter<FigursAdapter.FigursHolder>() {
                     namesScore.text="${figurs.name}. Score=${figurs.score}"
             }
     }
-
+//вА
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FigursHolder {
         val view=LayoutInflater.from(parent.context).inflate(R.layout.figurs,parent,false)
         return FigursHolder(view)
