@@ -6,6 +6,7 @@ object Constance {
     const val SIGN_STATE="sign_state"
     const val RQESTCOD_SIGNUP_=228
     const val RQESTCOD_SIGNIN_=337
+    const val SIZE_IMG_FOR_GAMES = 50
 
     const val LOGINE="Login"
     const val PASSWORD="Password"

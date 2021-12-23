@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.app3.FigursAdapter
-import com.example.app3.Figurs_Item
-import com.example.app3.Games
+import com.example.app3.games.Games
 import com.example.app3.R
 import com.example.app3.databinding.PersonalAccountBinding
 import kotlin.random.Random as Random

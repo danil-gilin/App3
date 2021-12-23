@@ -1,9 +1,10 @@
-package com.example.app3
+package com.example.app3.SigInUp
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app3.R
 import com.example.app3.databinding.FigursBinding
 
 class FigursAdapter : RecyclerView.Adapter<FigursAdapter.FigursHolder>() {
@@ -12,7 +13,7 @@ class FigursAdapter : RecyclerView.Adapter<FigursAdapter.FigursHolder>() {
 
     class FigursHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         val binding =FigursBinding.bind(itemView)
-            fun bind(figurs:Figurs_Item)= with(binding){
+            fun bind(figurs: Figurs_Item)= with(binding){
                     imfigure.setImageResource(figurs.img)
                     namesScore.text="${figurs.name}. Score=${figurs.score}"
             }

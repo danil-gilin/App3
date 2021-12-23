@@ -1,38 +1,33 @@
 package com.example.app3.games
 
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import com.example.app3.R
+import android.util.Log
+import java.util.*
+import kotlin.collections.ArrayList
 
-class Field (parent: RelativeLayout, private val size: Int,private val cx:Int,private val cy:Int){
-    private val cells = ArrayList<ImageView>()
-    private var coordinats=arrayOf<Array<Point>>()
-    init {
-        for (i in 0 until size) {
-            var array = arrayOf<Int>()
-            for (j in 0 until size) {
-                array += 0
+class Point(var x: Int = 0, var y :Int= 0) {
+     fun inArray(array: ArrayList<Point>):Boolean{
+        for (index in array){
+
+            if(index.x==this.x && index.y==this.y){
+                return false
             }
-            coordinats += array
         }
+        return true
+    }
 
-        for (i in (0..coordinats.size-2 step 2)) {
-            val img = ImageView(parent.context)
-            cells.add(img)
-            img.setImageResource(R.drawable.field)
-
-            val params = RelativeLayout.LayoutParams(50, 50)
-            params.leftMargin = coordinats[i]
-            params.topMargin = coordinats[i + 1]
-            //img.layoutParams = params // второй вариант
-
-            parent.addView(img, params) // parent.addView(img) // второй вариант
-
+    fun inDetectivePos(array: ArrayList<Point>): Boolean {
+        for(field in array){
+            if(this.y >= field.y && this.y <= field.y+50
+                && this.x <= field.x +50 && this.x >= field.x ) {
+                return true
+            }
         }
+        return false
     }
 
 
-
-
+    fun inDekstope(centeX:Int,centeY: Int):Boolean{
+        return this.x-50>0&&this.y>0-50&&this.x+50<centeX*2&&this.y+50<centeY*2
+    }
 
 }

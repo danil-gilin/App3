@@ -9,22 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App3">
-
-        <activity android:name=".SignInUp"></activity>
-
-
-
-        <activity android:name=".MainActivity">
+        <activity android:name=".games.Games" ></activity>
+        <activity android:name=".SigInUp.SignInUp" />
+        <activity android:name=".SigInUp.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".PersonalAccount" />
-
+        <activity android:name=".SigInUp.PersonalAccount" />
     </application>
 
 </manifest>
