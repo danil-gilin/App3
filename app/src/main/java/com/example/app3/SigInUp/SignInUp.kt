@@ -1,4 +1,4 @@
-package com.example.app3
+package com.example.app3.SigInUp
 
 
 import android.content.Intent
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import com.example.app3.R
 import com.example.app3.constance.Constance
 import com.example.app3.databinding.SignInUpBinding
 
@@ -35,7 +36,7 @@ class SignInUp : AppCompatActivity() {
     fun onClickDone(view: View) {
         if (signstate == Constance.SIG_UP_STATE) {
 
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             intent.putExtra(Constance.LOGINE, bindingclass.edLogin.text.toString())
             intent.putExtra(Constance.PASSWORD, bindingclass.edPassword.text.toString())
             intent.putExtra(Constance.NAME1, bindingclass.edName1.text.toString())
@@ -47,7 +48,7 @@ class SignInUp : AppCompatActivity() {
             finish()
 
         } else if (signstate == Constance.SIG_IN_STATE) {
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             intent.putExtra(Constance.LOGINE, bindingclass.edLogin.text.toString())
             intent.putExtra(Constance.PASSWORD, bindingclass.edPassword.text.toString())
             setResult(RESULT_OK, intent)
