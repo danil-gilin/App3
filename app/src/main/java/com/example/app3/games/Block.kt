@@ -75,11 +75,14 @@ class Block(parent: RelativeLayout, private val size: Int, vararg cellsPos: Int)
     fun rotate() {
         if (!isAnimated) return
         isAnimated = false
+        var i=0
         for (cell in cells) {
+            Log.d("MyLog2","${cell.left} + ${cell.top}")
             val anim = RotateAnimation(
                 0f, 90f,
                 (cx - cell.left).toFloat(), (cy - cell.top).toFloat()
             )
+
             anim.duration = 400 // длительность
             anim.isFillEnabled = true // хз зачем но надо
             anim.fillBefore = true // хз зачем но надо
@@ -95,12 +98,16 @@ class Block(parent: RelativeLayout, private val size: Int, vararg cellsPos: Int)
                     cell.layoutParams = params
                     cell.rotation = (cell.rotation + 90) % 360
                     isAnimated = true
+                    coordinatsBlock[i].x=params.leftMargin
+                    coordinatsBlock[i].y=params.topMargin
+                    i++
                 }
 
                 override fun onAnimationRepeat(p0: Animation?) {}
 
             })
             cell.startAnimation(anim)
+
         }
     }
 
