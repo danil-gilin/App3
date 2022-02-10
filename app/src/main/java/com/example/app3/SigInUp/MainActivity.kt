@@ -4,11 +4,11 @@ package com.example.app3.SigInUp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.app3.R
+import com.example.app3.basic_menu.PersonalAccount
 import com.example.app3.constance.Constance
 import com.example.app3.databinding.ActivityMainBinding
 

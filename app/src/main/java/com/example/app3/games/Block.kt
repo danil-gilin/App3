@@ -1,51 +1,44 @@
 package com.example.app3.games
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
+import android.view.animation.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.core.view.isInvisible
 import com.example.app3.R
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
+import kotlin.random.Random
 
-class Block(parent: RelativeLayout, private val size: Int, vararg cellsPos: Int) {
+class Block(private val parent: RelativeLayout,  posX: Int, posY: Int, private val size: Int) {
     val cells = ArrayList<ImageView>()
+    val width: Int
+    val height: Int
     var coordinatsBlock = arrayListOf<Point>()
-    private var isAnimated = true // разрешено для поворота
+    private var lockAnimated = 0
+    var detective = false
     var cx: Int // координаты центра
     var cy: Int // координаты центра
 
     init {
 
-        for (i in (0..cellsPos.size - 2 step 2)) {
-            var point = Point(cellsPos[i], cellsPos[i + 1])
-            coordinatsBlock.add(point)
-        }
-
-        var top = Int.MAX_VALUE   // крайние точки всего блока
-        var right = Int.MIN_VALUE // ...
-        var bot = Int.MIN_VALUE   // ...
-        var left = Int.MAX_VALUE  // крайние точки всего блока
-        for (i in (0..cellsPos.size - 2 step 2)) {
-            val img = ImageView(parent.context)
-            cells.add(img)
-            img.setImageResource(R.drawable.gold)
+        val cellsPos = RandomCells(Random.nextInt(2, 6), 4)
+        for (point in cellsPos.cells) {
+            cells.add(ImageView(parent.context))
+            cells.last().setImageResource(R.drawable.gold)
 
             val params = RelativeLayout.LayoutParams(size, size)
-            params.leftMargin = cellsPos[i]
-            params.topMargin = cellsPos[i + 1]
-            //img.layoutParams = params // второй вариант
-
-            parent.addView(img, params) // parent.addView(img) // второй вариант
-
-            if (cellsPos[i + 1] < top) top = cellsPos[i + 1]
-            if (cellsPos[i] + size > right) right = cellsPos[i] + size
-            if (cellsPos[i + 1] + size > bot) bot = cellsPos[i + 1] + size
-            if (cellsPos[i] < left) left = cellsPos[i]
+            params.leftMargin = posX + (point[0] - cellsPos.left) * size
+            params.topMargin = posY + (point[1] - cellsPos.top) * size
+            parent.addView(cells.last(), params)
         }
-        cx = if (cellsPos.isEmpty()) 0 else left + (right - left) / 2
-        cy = if (cellsPos.isEmpty()) 0 else top + (bot - top) / 2
+        width = (cellsPos.right - cellsPos.left + 1) * size
+        height = (cellsPos.bot - cellsPos.top + 1) * size
+        cx = posX + width / 2
+        cy = posY + height / 2
     }
 
     fun containsPoint(x: Int, y: Int): Boolean {
@@ -61,7 +54,6 @@ class Block(parent: RelativeLayout, private val size: Int, vararg cellsPos: Int)
             block.x+=deltaX
             block.y+=deltaY
         }
-
         cx += deltaX
         cy += deltaY
         for (cell in cells) {
@@ -72,21 +64,21 @@ class Block(parent: RelativeLayout, private val size: Int, vararg cellsPos: Int)
         }
     }
 
-    fun rotate() {
-        if (!isAnimated) return
-        isAnimated = false
-        var i=0
+    fun startCreateAnimation() {
         for (cell in cells) {
-            Log.d("MyLog2","${cell.left} + ${cell.top}")
-            val anim = RotateAnimation(
-                0f, 90f,
-                (cx - cell.left).toFloat(), (cy - cell.top).toFloat()
-            )
+            cell.startAnimation(AnimationUtils.loadAnimation(parent.context, R.anim.create_block))
+        }
+    }
 
+    fun rotate(field: Field) {
+        if (lockAnimated > 0) return
+        lockAnimated = cells.size
+        var i=0
+       for (cell in cells) {
+            val p = cell.layoutParams as RelativeLayout.LayoutParams
+            val anim = RotateAnimation(0f, 90f, (cx - p.leftMargin).toFloat(), (cy - p.topMargin).toFloat())
             anim.duration = 400 // длительность
             anim.isFillEnabled = true // хз зачем но надо
-            anim.fillBefore = true // хз зачем но надо
-
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {}
                 override fun onAnimationEnd(p0: Animation?) {
@@ -97,17 +89,78 @@ class Block(parent: RelativeLayout, private val size: Int, vararg cellsPos: Int)
                     params.leftMargin = temp
                     cell.layoutParams = params
                     cell.rotation = (cell.rotation + 90) % 360
-                    isAnimated = true
+
+                    lockAnimated -= 1
                     coordinatsBlock[i].x=params.leftMargin
                     coordinatsBlock[i].y=params.topMargin
                     i++
+                    if(lockAnimated==0){
+                       detective= field.figureDetection(this@Block)
+                    }
                 }
 
                 override fun onAnimationRepeat(p0: Animation?) {}
 
             })
+
             cell.startAnimation(anim)
 
+        }
+
+    }
+
+
+    fun startDestroyAnimation(blockList: ArrayList<Block>) {
+        for (cell in cells) {
+            val p = cell.layoutParams as RelativeLayout.LayoutParams
+            val animSet = AnimationSet(parent.context, null)
+            animSet.duration = 400
+            animSet.fillAfter = true
+            val anim1 = RotateAnimation(
+                0f, 180f,
+                (p.leftMargin - cx + size).toFloat(), (p.topMargin - cy + size).toFloat()
+            )
+            val anim2 = AlphaAnimation(1f, 0f)
+            animSet.addAnimation(anim1)
+            animSet.addAnimation(anim2)
+            if (cell == cells[0]) {
+                animSet.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(p0: Animation?) {}
+                    override fun onAnimationEnd(p0: Animation?) {
+                        Handler(Looper.getMainLooper()).postDelayed({ destroy(blockList) }, 100)
+                    }
+
+                    override fun onAnimationRepeat(p0: Animation?) {}
+                })
+            }
+            cell.startAnimation(animSet)
+        }
+    }
+
+    fun destroy(blockList: ArrayList<Block>) {
+        blockList.remove(this)
+        for (c in cells) parent.removeView(c)
+    }
+
+    fun startMoveAnimation(distance: Int) {
+        for (cell in cells) {
+            val anim = TranslateAnimation(0f, 0f,
+                0f, distance.toFloat())
+            anim.duration = 500
+            anim.isFillEnabled = true
+            if (cell == cells[0]) {
+                anim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(p0: Animation?) {}
+                    override fun onAnimationEnd(p0: Animation?) {
+                        move(0, distance)
+                    }
+                    override fun onAnimationRepeat(p0: Animation?) {}
+                })
+            }
+            cell.startAnimation(anim)
+            var pointb = Point(cell.left, cell.top)
+            Log.d("Field1","${pointb.x}+ ${pointb.y}")
+            coordinatsBlock.add(pointb)
         }
     }
 

@@ -1,11 +1,14 @@
 package com.example.app3.games
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.RelativeLayout
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.app3.databinding.GamesBinding
@@ -20,6 +23,7 @@ class Games : AppCompatActivity() {
     var lastX = 0
     var lastY = 0
     var downX = 0
+    private var size=0
     var downY = 0
 
 
@@ -39,7 +43,10 @@ class Games : AppCompatActivity() {
         var centerY = displaymetrics.heightPixels / 2
         var centerX = displaymetrics.widthPixels / 2
 
-        val GamesField=Field(rootblock,30, centerX-25, centerY-25)
+        size=intent.getIntExtra("difficult",0)*10
+
+        val GamesField=Field(rootblock,size, centerX-25, centerY-25)
+        Pool(root, blocks, 0, 0, 830)
 
         root.setOnTouchListener { v, event ->
             when (event.action) {
@@ -51,10 +58,14 @@ class Games : AppCompatActivity() {
                             lastX = downX
                             lastY = downY
                             capturedBlock = block
+                            break
                         }
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (capturedBlock != null) {
+                        if(capturedBlock!!.detective) {
+                            GamesField.figureOutDetection(capturedBlock!!)
+                        }
                         capturedBlock!!.move(
                             event.x.toInt() - lastX,
                             event.y.toInt() - lastY
@@ -65,13 +76,11 @@ class Games : AppCompatActivity() {
                 }
                 MotionEvent.ACTION_UP -> {
                     if (event.x.toInt() == downX && event.y.toInt() == downY) {
-                        capturedBlock?.rotate()
+                        GamesField.figureOutDetection(capturedBlock!!)
+                        capturedBlock?.rotate(GamesField)
                     }else{
                         if (capturedBlock != null) {
-                           if(GamesField.figureDetection(capturedBlock!!)){
-                               capturedBlock!!.delete()
-                                blocks.remove(capturedBlock)
-                           }
+                          capturedBlock!!.detective= GamesField.figureDetection(capturedBlock!!)
                         }
                     }
                     capturedBlock = null
@@ -79,11 +88,6 @@ class Games : AppCompatActivity() {
             }
             true
         }
-
-        blocks.add(Block(root, 50, 0, 0, 50, 0, 50, 50, 100, 50, 100, 100))
-        blocks.add(Block(root, 50, 200, 200, 200, 250, 200, 300))
-        blocks.add(Block(root, 50, 200, 200, 200, 250, 200, 300))
-        blocks.add(Block(root, 50, 200, 200, 200, 250, 200, 300))
 
     }
 }
