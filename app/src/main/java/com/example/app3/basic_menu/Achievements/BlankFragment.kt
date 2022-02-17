@@ -33,9 +33,7 @@ class BlankFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-      /*  dataPlayMenu.AchivementScrinshot.observe(activity as LifecycleOwner,{
-            binding.blurLayout.setBitmapBlur(it,10,100)
-        })*/
+
     }
 
     companion object {
