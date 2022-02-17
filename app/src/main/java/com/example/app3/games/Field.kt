@@ -18,6 +18,7 @@ class Field(
 ) {
     private val cells = ArrayList<ImageView>()
     private var coordinats = arrayListOf<Point>()
+    private var fulldetective=false
     private var detective_coordinats = arrayListOf<Point>()
 
     init {
@@ -27,46 +28,26 @@ class Field(
         for (index in 0 until size - 1) {
             val pool = arrayListOf<Point>()
             for (point in coordinats) {
-                if (Point(
-                        point.x + sizeImg,
-                        point.y
-                    ).inArray(coordinats) && Point(
-                        point.x + sizeImg,
-                        point.y
-                    ).inDekstope(cx, cy)
+                if (Point(point.x + sizeImg, point.y).inArray(coordinats) &&
+                    Point(point.x + sizeImg, point.y).inDekstope(cx, cy,sizeImg)
                 ) {
                     var temp = Point(point.x + sizeImg, point.y)
                     pool.add(temp)
                 }
-                if (Point(
-                        point.x -sizeImg,
-                        point.y
-                    ).inArray(coordinats) && Point(
-                        point.x - sizeImg,
-                        point.y
-                    ).inDekstope(cx, cy)
+                if (Point(point.x -sizeImg, point.y).inArray(coordinats) &&
+                    Point(point.x - sizeImg, point.y).inDekstope(cx, cy,sizeImg)
                 ) {
                     var temp = Point(point.x - sizeImg, point.y)
                     pool.add(temp)
                 }
-                if (Point(
-                        point.x,
-                        point.y + sizeImg
-                    ).inArray(coordinats) && Point(
-                        point.x,
-                        point.y + sizeImg
-                    ).inDekstope(cx, cy)
+                if (Point(point.x, point.y + sizeImg).inArray(coordinats) &&
+                    Point(point.x, point.y + sizeImg).inDekstope(cx, cy,sizeImg)
                 ) {
                     var temp = Point(point.x, point.y + sizeImg)
                     pool.add(temp)
                 }
-                if (Point(
-                        point.x,
-                        point.y - sizeImg
-                    ).inArray(coordinats) && Point(
-                        point.x,
-                        point.y - sizeImg
-                    ).inDekstope(cx, cy)
+                if (Point(point.x, point.y - sizeImg).inArray(coordinats) &&
+                    Point(point.x, point.y - sizeImg).inDekstope(cx, cy,sizeImg)
                 ) {
                     var temp = Point(point.x, point.y - sizeImg)
                     pool.add(temp)
@@ -240,5 +221,9 @@ class Field(
         } else return Double.MAX_VALUE
     }
 
+    fun checkWin():Boolean{
+        fulldetective = detective_coordinats.size==coordinats.size
+        return fulldetective
+    }
 
 }

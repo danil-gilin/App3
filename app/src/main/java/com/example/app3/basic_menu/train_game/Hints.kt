@@ -1,60 +1,74 @@
 package com.example.app3.basic_menu.train_game
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.app3.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import com.example.app3.basic_menu.DataPlayMenu
+import com.example.app3.databinding.FragmentHintsBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Hints.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Hints : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var binding:FragmentHintsBinding
+    val dataPlayMenu : DataPlayMenu by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hints, container, false)
+        binding= FragmentHintsBinding.inflate(inflater)
+        binding.blurLa.blurColor(Color.BLACK)
+        binding.blurLa.blurOpacity(0.3f)
+        dataPlayMenu.TrainScrinshot.value?.let { binding.blurLa.setBitmapBlur(it,1,10) }
+        binding.txtHint1.movementMethod = ScrollingMovementMethod();
+        binding.txtHint2.movementMethod = ScrollingMovementMethod();
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.hint1.setOnClickListener {
+            it.visibility=View.GONE
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
+        binding.hint2.setOnClickListener {
+            it.visibility=View.GONE
+            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
+        dataPlayMenu.HintString.observe(activity as LifecycleOwner,{
+            if(dataPlayMenu.RightLeft.value==0){
+                binding.txtHint1.text=it
+                binding.hint1.visibility=View.VISIBLE
+
+            }
+            if(dataPlayMenu.RightLeft.value==1){
+                binding.txtHint2.text=it
+                binding.hint2.visibility=View.VISIBLE
+            }
+            if(dataPlayMenu.RightLeft.value==2){
+                binding.winTxt.text=it
+                binding.winLn.visibility=View.VISIBLE
+                binding.winBtn.setOnClickListener {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+                }
+            }
+        })
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dataPlayMenu.activeHints.value=true
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Hints.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Hints().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = Hints()
     }
 }

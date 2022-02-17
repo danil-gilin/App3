@@ -1,4 +1,4 @@
-package com.example.app3.basic_menu
+package com.example.app3.basic_menu.Achievements
 
 import com.example.app3.databinding.FigursBinding
 

@@ -39,15 +39,16 @@ class PlayMenu : Fragment() {
             val intentGames= Intent(activity , Games::class.java)
             intentGames.putExtra("difficult",difficult)
             startActivity(intentGames);
-            Log.d("Field1","difficult")
         }
 
         binding.butEazy.setOnClickListener {
             binding.previeFields.removeAllViews()
+            Log.d("Log1","${binding.lnFields.width}")
             var previewFields=Field(binding.previeFields,10,binding.lnFields.width/2,binding.lnFields.height/2,40)
             difficult=1
         }
         binding.butNormal.setOnClickListener {
+            Log.d("Log1","${binding.lnFields.width}")
             binding.previeFields.removeAllViews()
             var previewFields=Field(binding.previeFields,20,binding.lnFields.width/2,binding.lnFields.height/2,40)
             difficult=2
@@ -64,7 +65,6 @@ class PlayMenu : Fragment() {
 
 
     companion object {
-
         @JvmStatic
         fun newInstance() = PlayMenu()
     }

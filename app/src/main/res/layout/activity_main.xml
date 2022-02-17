@@ -7,53 +7,50 @@
     android:background="#434040"
     tools:context=".SigInUp.MainActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="371dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="468dp"
-        android:onClick="onClicksigin"
-        android:text="@string/sign_in"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/bhite"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="onClicksigup"
-        android:text="@string/sign_up"
-        app:layout_constraintEnd_toEndOf="@+id/button"
-        app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        <ImageView
+            android:id="@+id/imgavatar"
+            android:layout_width="186dp"
+            android:layout_height="194dp"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/notaccount" />
 
-    <TextView
-        android:id="@+id/tvibfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
-        android:textColor="#FD0505"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="@+id/button"
-        app:layout_constraintHorizontal_bias="0.486"
-        app:layout_constraintStart_toStartOf="@+id/button" />
+        <TextView
+            android:id="@+id/tvibfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FD0505"
+            android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/imgavatar"
-        android:layout_width="186dp"
-        android:layout_height="194dp"
-        android:layout_marginTop="328dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/tvibfo"
-        app:layout_constraintEnd_toEndOf="@+id/tvibfo"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="@+id/tvibfo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/notaccount" />
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClicksigin"
+                android:text="@string/sign_in" />
+
+            <Button
+                android:id="@+id/bhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClicksigup"
+                android:text="@string/sign_up" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

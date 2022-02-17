@@ -1,4 +1,4 @@
-package com.example.app3.basic_menu
+package com.example.app3.basic_menu.Achievements
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.app3.R
+import com.example.app3.basic_menu.DataPlayMenu
 import com.example.app3.databinding.FragmentAchievementsBinding
 import kotlin.random.Random
 
@@ -18,8 +18,8 @@ import kotlin.random.Random
 class Achievements : Fragment() {
     lateinit var binding: FragmentAchievementsBinding
 
-    private val dataPlayMenu:DataPlayMenu by activityViewModels()
-    private lateinit var adapter :AchivementAdapter
+    private val dataPlayMenu: DataPlayMenu by activityViewModels()
+    private lateinit var adapter : AchivementAdapter
     private val imgAchivementList = listOf(
         R.drawable.cup1,
         R.drawable.cup2,
@@ -32,14 +32,16 @@ class Achievements : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         binding = FragmentAchievementsBinding.inflate(inflater)
-        adapter = AchivementAdapter(object : AchivmentClickListiner{
+        adapter = AchivementAdapter(object : AchivmentClickListiner {
             override fun onClick(v: View) {
                 binding.infoCup.removeAllViews()
                 v.visibility=View.INVISIBLE
                 dataPlayMenu.AchivementScrinshot.value= screenShot(binding.root)
                 v.visibility=View.VISIBLE
                 dataPlayMenu.Cup.value=v.tag as Achivement_Item
-                activity?.supportFragmentManager?.beginTransaction()?.replace(binding.infoCup.id,BlankFragment.newInstance())?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(binding.infoCup.id,
+                    BlankFragment.newInstance()
+                )?.commit()
                 binding.infoCup.visibility = View.VISIBLE
                 dataPlayMenu.active.value=binding.rcAchivment
             }})

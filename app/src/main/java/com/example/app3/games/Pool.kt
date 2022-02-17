@@ -8,16 +8,20 @@ import android.view.animation.AnimationUtils
 import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.RelativeLayout
+import androidx.lifecycle.MutableLiveData
 import com.example.app3.R
 
 @SuppressLint("ClickableViewAccessibility")
 class Pool(private val parent: RelativeLayout,
-           private val blockList: ArrayList<Block>,
-           private val posX: Int,
-           private val posY: Int,
-           val size: Int) {
+                private val blockList: ArrayList<Block>,
+                private val posX: Int,
+                private val posY: Int,
+                val size: Int) {
     val blocks: Array<Block?> = arrayOf(null, null, null, null, null, null)
     val colW = (size * 0.27).toInt()
+    val actionI: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
     var action = 2
 
     init {
@@ -35,6 +39,7 @@ class Pool(private val parent: RelativeLayout,
                     blocks[id] = null
                 }
             }
+            actionI.value=action
             action--
         }
             true
@@ -68,7 +73,7 @@ class Pool(private val parent: RelativeLayout,
         update()
     }
 
-    private fun update() {
+    protected fun update() {
         action = 2
         for (i in blocks.indices) if (blocks[i] != null) blocks[i]?.destroy(blockList)
         for (i in 0..5) {
@@ -81,7 +86,7 @@ class Pool(private val parent: RelativeLayout,
         }
     }
 
-    private fun getBlockId(touchX: Int, touchY: Int): Int {
+    protected fun getBlockId(touchX: Int, touchY: Int): Int {
         return 3 * (touchY / colW) + touchX / colW
     }
 }

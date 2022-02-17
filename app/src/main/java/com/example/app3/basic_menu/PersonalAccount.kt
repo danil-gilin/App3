@@ -1,17 +1,13 @@
 package com.example.app3.basic_menu
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.app3.games.Games
 import com.example.app3.R
+import com.example.app3.basic_menu.train_game.Train_game
 import com.example.app3.databinding.PersonalAccount2Binding
-import com.example.app3.databinding.PersonalAccountBinding
-import kotlin.random.Random as Random
 
 class PersonalAccount : AppCompatActivity() {
     private lateinit var bindingclass: PersonalAccount2Binding
@@ -24,15 +20,26 @@ class PersonalAccount : AppCompatActivity() {
         setContentView(bindingclass.root)
         val avatar = intent.getIntExtra("Img", 0)!!
         val name = intent.getStringExtra("Name")!!
+       if(name=="rmpty"){
+            openFrag(Train_game.newInstance(),bindingclass.menuHolder.id)
+            bindingclass.viewPager2.visibility= View.GONE
+        }
+        else {
+            bindingclass.viewPager2.adapter = ViewPagerFragmentStateAdapter(supportFragmentManager, this.lifecycle)
+        }
 
-        bindingclass.viewPager2.adapter = ViewPagerFragmentStateAdapter(supportFragmentManager,this.lifecycle)
-
-
-
-        //openFrag(Achievements.newInstance(),bindingclass.menuHolder.id)
-        //openFrag(PlayMenu.newInstance(),bindingclass.menuHolder.id)
         dataPlayModel.imId.value=avatar
         dataPlayModel.nameP.value=name
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dataPlayModel.activeMenu.observe(this,{
+            dataPlayModel.imId.value=R.drawable.boy1
+            dataPlayModel.nameP.value="New Player"
+            bindingclass.viewPager2.visibility= View.VISIBLE
+            bindingclass.viewPager2.adapter = ViewPagerFragmentStateAdapter(supportFragmentManager, this.lifecycle)
+        })
     }
 
     private fun openFrag(f: Fragment,idHolder:Int){

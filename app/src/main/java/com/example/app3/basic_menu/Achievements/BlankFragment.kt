@@ -1,4 +1,4 @@
-package com.example.app3.basic_menu
+package com.example.app3.basic_menu.Achievements
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
-import com.example.app3.R
+import com.example.app3.basic_menu.DataPlayMenu
 import com.example.app3.databinding.AchivmentInfoBinding
 
 class BlankFragment : Fragment() {
     lateinit var binding: AchivmentInfoBinding
-    private val dataPlayMenu:DataPlayMenu by activityViewModels()
+    private val dataPlayMenu: DataPlayMenu by activityViewModels()
 
 
     override fun onCreateView(

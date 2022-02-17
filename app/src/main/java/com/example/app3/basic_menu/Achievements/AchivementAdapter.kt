@@ -1,12 +1,10 @@
-package com.example.app3.basic_menu
+package com.example.app3.basic_menu.Achievements
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app3.R
 import com.example.app3.databinding.FigursBinding
 
 class AchivementAdapter(private val onClickListiner: AchivmentClickListiner) : RecyclerView.Adapter<AchivementAdapter.AchivementHolder>(),View.OnClickListener {

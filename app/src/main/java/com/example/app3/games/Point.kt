@@ -42,8 +42,8 @@ class Point(var x: Int = 0, var y: Int = 0) {
     }
 
 
-    fun inDekstope(centeX: Int, centeY: Int): Boolean {
-        return this.x - Constance.SIZE_IMG_FOR_GAMES > 0 && this.y > 0 && this.x + 50 < centeX * 2 && this.y + Constance.SIZE_IMG_FOR_GAMES < centeY * 2
+    fun inDekstope(centeX: Int, centeY: Int,size_Img:Int): Boolean {
+        return this.x - size_Img > 0 && this.y > 0 && this.x + 50 < centeX * 2 && this.y + size_Img < centeY * 2
     }
 
 }

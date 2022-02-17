@@ -23,8 +23,8 @@ class Games : AppCompatActivity() {
     var lastX = 0
     var lastY = 0
     var downX = 0
-    private var size=0
     var downY = 0
+    private var size=0
 
 
     @RequiresApi(Build.VERSION_CODES.R)

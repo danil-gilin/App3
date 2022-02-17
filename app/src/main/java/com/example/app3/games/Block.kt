@@ -137,7 +137,7 @@ class Block(private val parent: RelativeLayout,  posX: Int, posY: Int, private v
         }
     }
 
-    fun destroy(blockList: ArrayList<Block>) {
+    fun destroy(blockList: ArrayList<Block>){
         blockList.remove(this)
         for (c in cells) parent.removeView(c)
     }

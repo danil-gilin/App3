@@ -3,11 +3,10 @@ package com.example.app3.basic_menu
 
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-
+import com.example.app3.basic_menu.Achievements.Achievements
 
 
 class ViewPagerFragmentStateAdapter(fm: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fm, lifecycle) {
